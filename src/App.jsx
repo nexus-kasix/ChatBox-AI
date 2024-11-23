@@ -7,9 +7,11 @@ import SettingsModal from './components/Settings/SettingsModal'
 function App() {
   return (
     <div class="app">
-      <Header />
-      <MessagesArea />
-      <ChatInput />
+      <div class="app-container">
+        <Header />
+        <MessagesArea />
+        <ChatInput />
+      </div>
       <SettingsModal />
     </div>
   )

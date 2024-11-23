@@ -1,4 +1,5 @@
 import { createSignal } from 'solid-js'
+import { selectedModel, models } from './modelStore'
 
 export const MessageType = {
   USER: 'user',
@@ -30,7 +31,12 @@ const createStore = () => {
   }
 
   const addMessage = (content, type = MessageType.USER) => {
-    const newMessage = { id: Date.now(), content, type }
+    const newMessage = { 
+      id: Date.now(), 
+      content, 
+      type,
+      model: type === MessageType.AI ? selectedModel() : null 
+    }
     const updatedChats = chats().map(chat => {
       if (chat.id === currentChatId()) {
         // Update chat title based on first user message if it's "New Chat"

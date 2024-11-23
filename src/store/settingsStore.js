@@ -17,6 +17,7 @@ export const providers = {
 };
 
 export const [isSettingsOpen, setIsSettingsOpen] = createSignal(false);
+export const [currentProvider, setCurrentProvider] = createSignal('google');
 export const [apiKeys, setApiKeys] = createSignal({
   google: localStorage.getItem('google_api_key') || '',
   mistral: localStorage.getItem('mistral_api_key') || ''
@@ -37,4 +38,22 @@ export const getAIClient = (provider) => {
     return new Mistral({ apiKey: keys.mistral });
   }
   return null;
+};
+
+export const useSettings = () => {
+  const getCurrentModel = () => {
+    const provider = currentProvider();
+    return providers[provider];
+  };
+
+  return {
+    isSettingsOpen,
+    setIsSettingsOpen,
+    currentProvider,
+    setCurrentProvider,
+    apiKeys,
+    saveApiKey,
+    getAIClient,
+    getCurrentModel
+  };
 };

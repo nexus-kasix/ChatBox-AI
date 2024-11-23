@@ -26,23 +26,31 @@ body, #root {
   background-color: var(--background-color);
 }
 
-.app-container {
+.app {
   width: 100%;
-  height: 100%;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  background: #f5f5f5;
+  background: var(--background-color);
   position: relative;
-  padding-top: 90px;
+}
+
+.app-container {
+  width: calc(100% - 32px);
+  max-width: var(--max-width);
+  height: 100%;
+  margin: 0 auto;
+  padding: 90px 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 
 .top-panel {
-  position: fixed;
+  position: absolute;
   top: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: calc(100% - 32px);
-  max-width: var(--max-width);
+  left: 0;
+  right: 0;
   background: var(--panel-background);
   padding: 16px 20px;
   border-radius: var(--border-radius);
@@ -94,14 +102,13 @@ body, #root {
 
 .messages-area {
   flex: 1;
+  width: 100%;
+  margin: 20px 0;
+  padding: 0 16px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  width: 100%;
-  padding: 16px;
-  margin-top: 0;
-  margin-bottom: 90px;
   scrollbar-width: thin;
   scrollbar-color: var(--accent-color) transparent;
 }
@@ -127,22 +134,42 @@ body, #root {
   animation: fadeIn 0.3s ease;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
 .user-message {
   align-self: flex-end;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-direction: row;
+}
+
+.user-message .message-content {
   background-color: var(--accent-color);
   color: white;
-  border-bottom-right-radius: 0.25rem;
+  padding: 12px 16px;
+  border-radius: 24px;
+  word-wrap: break-word;
+}
+
+.user-message .message-icon {
+  font-size: 20px;
+  color: black;
+  opacity: 0.7;
 }
 
 .ai-message {
   align-self: flex-start;
   color: var(--text-color);
   border-bottom-left-radius: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ai-message .message-icon {
+  font-size: 20px;
+  color: var(--text-color);
+  opacity: 0.7;
+  order: -1;
 }
 
 .error-message {
@@ -153,20 +180,19 @@ body, #root {
   background: none;
 }
 
-.message-content {
-  line-height: 1.4;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .input-panel {
-  position: fixed;
+  position: absolute;
   bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: calc(100% - 32px);
-  max-width: var(--max-width);
+  left: 0;
+  right: 0;
   background: var(--panel-background);
   padding: 8px;
-  border-radius: var(--border-radius);
+  border-radius: 100px !important;
   backdrop-filter: blur(10px);
   box-shadow: 0 8px 32px var(--shadow-color);
   z-index: 1000;
@@ -177,7 +203,7 @@ body, #root {
   gap: 8px;
   align-items: center;
   background: var(--input-background);
-  border-radius: calc(var(--border-radius) - 4px);
+  border-radius: 100px !important;
   padding: 8px;
 }
 
@@ -537,6 +563,39 @@ body, #root {
 
 .modal-body {
   padding: 1rem;
+}
+
+.welcome-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 24px;
+  padding: 20px;
+  text-align: center;
+  animation: fadeIn 0.5s ease;
+}
+
+.welcome-logo {
+  width: 120px;
+  height: 120px;
+  opacity: 0.9;
+}
+
+.welcome-title {
+  font-size: 2.5rem;
+  font-weight: 500;
+  color: var(--text-color);
+  margin: 0;
+}
+
+.welcome-text {
+  font-size: 1.1rem;
+  color: var(--text-secondary-color);
+  max-width: 400px;
+  line-height: 1.5;
+  margin: 0;
 }
 
 @media (max-width: 600px) {
