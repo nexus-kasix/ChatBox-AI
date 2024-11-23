@@ -3,6 +3,7 @@ import { models, selectedModel, setSelectedModelWithSave } from '../../store/mod
 
 export default function ModelSelector() {
   const [isModelMenuOpen, setIsModelMenuOpen] = createSignal(false)
+  const [hoveredModel, setHoveredModel] = createSignal(null)
 
   const toggleModelMenu = () => {
     setIsModelMenuOpen(!isModelMenuOpen())
@@ -11,6 +12,12 @@ export default function ModelSelector() {
   const selectModel = (model) => {
     setSelectedModelWithSave(model)
     setIsModelMenuOpen(false)
+  }
+
+  const getModelClasses = (modelKey) => {
+    const isSelected = selectedModel() === modelKey
+    const isHovered = hoveredModel() === modelKey
+    return `model-option ${isSelected ? 'selected' : ''} ${isHovered ? 'hovered' : ''}`
   }
 
   return (
@@ -23,25 +30,26 @@ export default function ModelSelector() {
         <i class={models[selectedModel()].icon}></i>
       </button>
       <div class={`model-menu ${isModelMenuOpen() ? 'open' : ''}`}>
-        {/* Gemini */}
-        <button 
-          type="button"
-          class={`model-option ${selectedModel() === 'gemini' ? 'active' : ''}`}
-          onClick={() => selectModel('gemini')}
-        >
-          <i class={models['gemini'].icon}></i>
-          <span>{models['gemini'].name}</span>
-        </button>
-
-        {/* Mistral */}
-        <button 
-          type="button"
-          class={`model-option ${selectedModel() === 'mistral-large' ? 'active' : ''}`}
-          onClick={() => selectModel('mistral-large')}
-        >
-          <i class={models['mistral-large'].icon}></i>
-          <span>{models['mistral-large'].name}</span>
-        </button>
+        {Object.entries(models).map(([key, model]) => (
+          <button 
+            type="button"
+            class={getModelClasses(key)}
+            onClick={() => selectModel(key)}
+            onMouseEnter={() => setHoveredModel(key)}
+            onMouseLeave={() => setHoveredModel(null)}
+          >
+            <div class="model-info">
+              <i class={model.icon}></i>
+              <span>{model.name}</span>
+              {(key === 'gemini-exp-1114' || key === 'gemini-1-5-pro') && (
+                <span class="new-badge">NEW</span>
+              )}
+            </div>
+            {hoveredModel() === key && (
+              <div class="model-description">{model.description}</div>
+            )}
+          </button>
+        ))}
       </div>
     </div>
   )

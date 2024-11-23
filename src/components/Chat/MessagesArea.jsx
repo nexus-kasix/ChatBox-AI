@@ -32,7 +32,15 @@ export default function MessagesArea() {
         fallback={<WelcomeScreen />}
       >
         <For each={getCurrentChat()?.messages || []}>
-          {(message) => <Message message={message} />}
+          {(message) => (
+            <Message 
+              message={message} 
+              onEdit={(msg) => {
+                const event = new CustomEvent('editMessage', { detail: msg });
+                window.dispatchEvent(event);
+              }} 
+            />
+          )}
         </For>
       </Show>
     </div>
