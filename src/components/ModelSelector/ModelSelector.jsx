@@ -41,7 +41,7 @@ export default function ModelSelector() {
             <div class="model-info">
               <i class={model.icon}></i>
               <span>{model.name}</span>
-              {(key === 'gemini-exp-1114' || key === 'gemini-1-5-pro') && (
+              {(key === 'gemini-1-5-flash' || key === 'codestral') && (
                 <span class="new-badge">NEW</span>
               )}
             </div>

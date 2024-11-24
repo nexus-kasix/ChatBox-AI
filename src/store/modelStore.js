@@ -19,11 +19,23 @@ export const models = {
     model: 'gemini-1.5-pro-latest',
     description: 'Fast responses. Great for long conversations.'
   },
+  'gemini-1-5-flash': {
+    name: 'Gemini 1.5 Flash',
+    icon: 'ri-google-fill',
+    model: 'gemini-1.5-flash-latest',
+    description: 'Fastest model with great performance.'
+  },
   'mistral-large': {
     name: 'Mistral Large',
     icon: 'ri-brain-fill',
     model: 'mistral-large-latest',
     description: 'Fast and reliable. Good for general tasks.'
+  },
+  'codestral': {
+    name: 'Codestral',
+    icon: 'ri-brain-fill',
+    model: 'codestral-latest',
+    description: 'Specialized in code generation and analysis.'
   }
 }
 

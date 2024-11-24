@@ -3,6 +3,7 @@ import { selectedModel, models } from "../../store/modelStore";
 import { useStore } from "../../store/chatStore";
 import { getAIClient, apiKeys } from "../../store/settingsStore";
 import ModelSelector from "../ModelSelector/ModelSelector";
+import AddButton from "../AddButton/AddButton";
 
 const generationConfig = {
   temperature: 1,
@@ -130,6 +131,7 @@ export default function ChatInput() {
           onInput={(e) => setInputValue(e.target.value)}
           placeholder="Message..."
         />
+        <AddButton />
         <ModelSelector />
         <button type="submit" class="send-button">
           <span>Send</span>

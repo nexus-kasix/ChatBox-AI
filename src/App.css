@@ -72,6 +72,19 @@ body, #root {
 .top-buttons {
   display: flex;
   gap: 8px;
+  align-items: center;
+}
+
+.button-group {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding: 0 8px;
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.button-group:last-child {
+  border-right: none;
 }
 
 .top-button {
@@ -194,27 +207,48 @@ body, #root {
 }
 
 .message-content pre {
-  background: #1E1E1E;
-  border-radius: 6px;
-  padding: 12px;
-  margin: 8px 0;
+  background: #282a36;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
   overflow-x: auto;
-  color: #D4D4D4;
+  position: relative;
+}
+
+.message-content pre::before {
+  content: attr(data-language);
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 4px 8px;
+  font-size: 12px;
+  color: #6272a4;
+  background: #2c2e3b;
+  border-radius: 0 8px 0 8px;
+  opacity: 0.8;
 }
 
 .message-content pre code {
+  font-family: 'Fira Code', 'Roboto Mono', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  tab-size: 2;
   background: transparent;
-  color: inherit;
   padding: 0;
-  font-family: 'Roboto Mono', monospace;
+  color: #f8f8f2;
 }
 
 .message-content code {
+  font-family: 'Fira Code', 'Roboto Mono', monospace;
+  font-size: 0.9em;
+  padding: 2px 6px;
   background: rgba(0, 0, 0, 0.1);
-  padding: 2px 4px;
   border-radius: 4px;
-  font-family: 'Roboto Mono', monospace;
-  color: var(--text-color);
+  color: var(--accent-color);
+}
+
+.dark .message-content code {
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .copy-button {
@@ -403,10 +437,25 @@ body, #root {
 .new-badge {
   background-color: var(--accent-color);
   color: white;
-  font-size: 10px;
   padding: 2px 6px;
-  border-radius: 8px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: bold;
   margin-left: 8px;
+  text-transform: uppercase;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .model-option i {
@@ -442,6 +491,123 @@ body, #root {
 
 .send-button i {
   font-size: 18px;
+}
+
+/* Dropdown Panels */
+.dropdown-container {
+  position: relative;
+}
+
+.dropdown-panel {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  background: var(--panel-background);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px var(--shadow-color);
+  width: 240px;
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  transition: all 0.2s;
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+}
+
+.dropdown-panel.open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+.dropdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-header h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.dropdown-content {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.dropdown-list {
+  padding: 8px;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text-color);
+  transition: background 0.2s;
+  gap: 8px;
+  min-width: 0;
+}
+
+.dropdown-item:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--accent-color);
+}
+
+.dropdown-item i {
+  font-size: 18px;
+}
+
+.dropdown-item.active {
+  background: rgba(var(--accent-color-rgb), 0.1);
+  color: var(--accent-color);
+}
+
+.close-button {
+  padding: 4px;
+  background: none;
+  border: none;
+  color: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.close-button:hover {
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.close-button i {
+  font-size: 20px;
+}
+
+/* Delete button in history items */
+.delete-button {
+  margin-left: auto;
+  opacity: 0.4;
+  padding: 4px;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.history-item:hover .delete-button {
+  opacity: 0.6;
+}
+
+.delete-button:hover {
+  opacity: 1;
 }
 
 /* History Panel */
@@ -517,8 +683,35 @@ body, #root {
 }
 
 .history-title {
-  font-size: 13px;
-  margin-right: 8px;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.history-buttons {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.edit-button {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: inherit;
+  opacity: 0.4;
+  transition: opacity 0.2s ease;
+}
+
+.history-item:hover .edit-button {
+  opacity: 0.6;
+}
+
+.edit-button:hover {
+  opacity: 1;
 }
 
 .delete-button {
@@ -527,7 +720,8 @@ body, #root {
   padding: 4px;
   cursor: pointer;
   color: inherit;
-  opacity: 0;
+  opacity: 0.4;
+  transition: opacity 0.2s ease;
 }
 
 .history-item:hover .delete-button {
@@ -536,6 +730,90 @@ body, #root {
 
 .delete-button:hover {
   opacity: 1;
+}
+
+.edit-title-input {
+  flex: 1;
+  min-width: 0;
+  padding: 4px 8px;
+  border: 1px solid var(--accent-color);
+  border-radius: 4px;
+  font-size: 13px;
+  background: var(--input-background);
+  color: var(--text-color);
+  margin-right: 0;
+}
+
+.edit-title-input:focus {
+  outline: none;
+}
+
+/* Tools Panel */
+.tools-container {
+  position: relative;
+}
+
+.tools-panel {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  background: var(--panel-background);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px var(--shadow-color);
+  width: 200px;
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  transition: all 0.2s;
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+}
+
+.tools-panel.open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+.tools-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.tools-header h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.tools-list {
+  padding: 8px;
+}
+
+.tool-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  border-radius: 6px;
+  color: rgba(0, 0, 0, 0.7);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tool-item:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--accent-color);
+}
+
+.tool-item i {
+  font-size: 18px;
 }
 
 /* Settings Panel */
@@ -710,6 +988,149 @@ body, #root {
   margin: 0;
 }
 
+/* Code formatting */
+pre {
+  background: #282a36;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+  overflow-x: auto;
+  position: relative;
+}
+
+pre::before {
+  content: attr(data-language);
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 4px 8px;
+  font-size: 12px;
+  color: #6272a4;
+  background: #2c2e3b;
+  border-radius: 0 8px 0 8px;
+  opacity: 0.8;
+}
+
+pre code {
+  font-family: 'Fira Code', 'Roboto Mono', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  tab-size: 2;
+  background: transparent;
+  padding: 0;
+  color: #f8f8f2;
+}
+
+code {
+  font-family: 'Fira Code', 'Roboto Mono', monospace;
+  font-size: 0.9em;
+  padding: 2px 6px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  color: var(--accent-color);
+}
+
+.dark code {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Стили для разных типов токенов */
+.hljs-keyword { color: #ff79c6; }
+.hljs-built_in { color: #8be9fd; }
+.hljs-type { color: #8be9fd; }
+.hljs-literal { color: #bd93f9; }
+.hljs-number { color: #bd93f9; }
+.hljs-regexp { color: #ff5555; }
+.hljs-string { color: #f1fa8c; }
+.hljs-subst { color: #f8f8f2; }
+.hljs-symbol { color: #f1fa8c; }
+.hljs-class { color: #50fa7b; }
+.hljs-function { color: #50fa7b; }
+.hljs-title { color: #50fa7b; }
+.hljs-params { color: #f8f8f2; }
+.hljs-comment { color: #6272a4; }
+.hljs-doctag { color: #ff79c6; }
+.hljs-meta { color: #6272a4; }
+.hljs-section { color: #50fa7b; }
+.hljs-name { color: #ff79c6; }
+.hljs-attribute { color: #50fa7b; }
+.hljs-tag { color: #ff79c6; }
+.hljs-variable { color: #f8f8f2; }
+.hljs-template-variable { color: #f8f8f2; }
+.hljs-addition { color: #50fa7b; }
+.hljs-deletion { color: #ff5555; }
+
+/* Modern minimal tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 24px 0;
+  background: var(--foreground-color);
+  border: 1px solid var(--border-color);
+}
+
+thead {
+  background: #f8f9fa;
+  border-bottom: 2px solid var(--border-color);
+}
+
+th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 500;
+  color: var(--text-color);
+  border-right: 1px solid var(--border-color);
+}
+
+th:last-child {
+  border-right: none;
+}
+
+td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+  color: var(--text-color);
+}
+
+td:last-child {
+  border-right: none;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+/* Responsive tables */
+@media (max-width: 600px) {
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
+
+/* Text formatting */
+em {
+  font-style: italic;
+  color: var(--text-color);
+}
+
+strong {
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+blockquote {
+  border-left: 4px solid var(--accent-color);
+  margin: 16px 0;
+  padding: 8px 16px;
+  background: var(--input-background);
+  border-radius: 4px;
+  font-style: italic;
+  color: var(--text-secondary-color);
+}
+
 @media (max-width: 600px) {
   .top-button span {
     display: none;
@@ -728,4 +1149,40 @@ body, #root {
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+.search-container {
+  padding: 8px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.search-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 13px;
+  background: var(--input-background);
+  color: var(--text-color);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
+
+.edit-title-input {
+  flex: 1;
+  min-width: 0;
+  padding: 4px 8px;
+  border: 1px solid var(--accent-color);
+  border-radius: 4px;
+  font-size: 13px;
+  background: var(--input-background);
+  color: var(--text-color);
+  margin-right: 0;
+}
+
+.edit-title-input:focus {
+  outline: none;
 }

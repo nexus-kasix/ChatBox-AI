@@ -1,18 +1,17 @@
 import './App.css'
-import Header from './components/Header/Header'
-import MessagesArea from './components/Chat/MessagesArea'
-import ChatInput from './components/Chat/ChatInput'
-import SettingsModal from './components/Settings/SettingsModal'
+import { Router, Route } from "@solidjs/router"
+import ChatPage from './pages/ChatPage'
+import AgentsPage from './pages/AgentsPage'
+import StonesPage from './pages/StonesPage'
 
 function App() {
   return (
     <div class="app">
-      <div class="app-container">
-        <Header />
-        <MessagesArea />
-        <ChatInput />
-      </div>
-      <SettingsModal />
+      <Router>
+        <Route path="/" component={ChatPage} />
+        <Route path="/agents" component={AgentsPage} />
+        <Route path="/stones" component={StonesPage} />
+      </Router>
     </div>
   )
 }

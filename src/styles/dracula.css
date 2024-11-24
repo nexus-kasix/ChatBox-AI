@@ -1,0 +1,110 @@
+/*!
+  Theme: Dracula
+  Author: Zeno Rocha
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+
+pre code.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 1em;
+}
+
+code.hljs {
+  padding: 3px 5px;
+}
+
+.hljs {
+  color: #f8f8f2;
+  background: #282a36;
+}
+
+.hljs ::selection,
+.hljs::selection {
+  background-color: #44475a;
+  color: #f8f8f2;
+}
+
+/* Dracula Comment */
+.hljs-comment {
+  color: #6272a4;
+}
+
+/* Dracula Cyan */
+.hljs-tag,
+.hljs-meta,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-doctag,
+.hljs-selector-tag,
+.hljs-section,
+.hljs-type {
+  color: #8be9fd;
+}
+
+/* Dracula Green */
+.hljs-function,
+.hljs-name,
+.hljs-attribute,
+.hljs-subst {
+  color: #50fa7b;
+}
+
+/* Dracula Orange */
+.hljs-number,
+.hljs-literal,
+.hljs-symbol,
+.hljs-bullet {
+  color: #ffb86c;
+}
+
+/* Dracula Pink */
+.hljs-keyword,
+.hljs-selector-id,
+.hljs-title,
+.hljs-title.class_,
+.hljs-title.class_.inherited__,
+.hljs-title.function_ {
+  color: #ff79c6;
+}
+
+/* Dracula Purple */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-class,
+.hljs-title.class_,
+.hljs-class .hljs-title,
+.hljs-strong {
+  color: #bd93f9;
+}
+
+/* Dracula Red */
+.hljs-string,
+.hljs-regexp,
+.hljs-addition,
+.hljs-attribute,
+.hljs-code,
+.hljs-title.function_,
+.hljs-title.function_.invoke__,
+.hljs-title.class_.inherited__ {
+  color: #ff5555;
+}
+
+/* Dracula Yellow */
+.hljs-attr,
+.hljs-params,
+.hljs-template-tag,
+.hljs-deletion,
+.hljs-variable {
+  color: #f1fa8c;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}

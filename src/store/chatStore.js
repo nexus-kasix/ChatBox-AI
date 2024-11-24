@@ -30,6 +30,26 @@ const createStore = () => {
     return chats().find(chat => chat.id === currentChatId()) || chats()[0]
   }
 
+  const renameChat = (chatId, newTitle) => {
+    const updatedChats = chats().map(chat => 
+      chat.id === chatId ? { ...chat, title: newTitle } : chat
+    )
+    setChats(updatedChats)
+    saveChats(updatedChats)
+  }
+
+  const searchChats = (query) => {
+    if (!query) return chats()
+    const lowerQuery = query.toLowerCase()
+    return chats().filter(chat => 
+      chat.title.toLowerCase().includes(lowerQuery) ||
+      chat.messages.some(msg => 
+        msg.type === MessageType.USER && 
+        msg.content.toLowerCase().includes(lowerQuery)
+      )
+    )
+  }
+
   const addMessage = (content, type = MessageType.USER) => {
     const newMessage = { 
       id: Date.now(), 
@@ -116,6 +136,8 @@ const createStore = () => {
     chats,
     currentChatId,
     getCurrentChat,
+    renameChat,
+    searchChats,
     addMessage,
     addAIResponse,
     addError,
