@@ -5,7 +5,6 @@ import DropdownPanel from '../Common/DropdownPanel';
 
 export default function Header() {
   const [isHistoryOpen, setIsHistoryOpen] = createSignal(false);
-  const [isToolsOpen, setIsToolsOpen] = createSignal(false);
   const [searchQuery, setSearchQuery] = createSignal('');
   const [editingChatId, setEditingChatId] = createSignal(null);
   const [editingTitle, setEditingTitle] = createSignal('');
@@ -33,8 +32,6 @@ export default function Header() {
           <i class="ri-add-line"></i>
           <span>New Chat</span>
         </button>
-
-        
 
         <div class="dropdown-container">
           <button class="top-button" onClick={() => setIsHistoryOpen(!isHistoryOpen())}>

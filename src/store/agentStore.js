@@ -14,7 +14,7 @@ const defaultAgent = {
 
 
 const [agents, setAgents] = createSignal(
-  JSON.parse(localStorage.getItem('agents')) || predefinedAgents
+  JSON.parse(localStorage.getItem('agents')) || []
 );
 
 const [currentAgent, setCurrentAgent] = createSignal(null);
@@ -40,16 +40,12 @@ export function useAgentStore() {
   };
 
   const deleteAgent = (agentId) => {
-    // Не удаляем предопределенных агентов
-    if (predefinedAgents.some(agent => agent.id === agentId)) {
-      return;
-    }
     setAgents(agents().filter((agent) => agent.id !== agentId));
     saveAgents();
   };
 
   const resetAgent = (agentId) => {
-    const defaultData = predefinedAgents.find(a => a.id === agentId);
+    const defaultData = defaultAgent;
     if (defaultData) {
       updateAgent(agentId, defaultData);
     }
