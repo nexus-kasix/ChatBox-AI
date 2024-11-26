@@ -1,27 +1,11 @@
-import { createSignal, onMount, createEffect } from 'solid-js'
-import { MessageType } from "../../store/chatStore"
-import { models } from "../../store/modelStore"
-import { marked } from "marked"
-import DOMPurify from 'dompurify'
+import { createSignal, createEffect } from 'solid-js';
+import { marked } from 'marked';
+import DOMPurify from 'dompurify';
+import styles from './AgentMessage.module.css';
 
-export default function Message({ message }) {
-  const [isCopied, setIsCopied] = createSignal(false)
+export default function AgentMessage({ message }) {
+  const [isCopied, setIsCopied] = createSignal(false);
   let messageContentRef;
-
-  const getModelIcon = () => {
-    if (!message.model) return ""
-    return models[message.model]?.icon || ""
-  }
-
-  const copyText = async () => {
-    try {
-      await navigator.clipboard.writeText(message.content)
-      setIsCopied(true)
-      setTimeout(() => setIsCopied(false), 2000)
-    } catch (err) {
-      console.error('Failed to copy text:', err)
-    }
-  }
 
   const getFormattedContent = () => {
     marked.setOptions({
@@ -47,7 +31,7 @@ export default function Message({ message }) {
       ADD_TAGS: ['code', 'pre'],
       ADD_ATTR: ['class', 'language-*', 'hljs']
     });
-  }
+  };
 
   const processCodeBlocks = () => {
     if (messageContentRef) {
@@ -93,46 +77,36 @@ export default function Message({ message }) {
   });
 
   return (
-    <div class={`message ${message.type === MessageType.USER ? "user-message" : "ai-message"}`}>
-      {message.type === MessageType.USER ? (
-        <div class="message-bubble user">
-          <div class="message-info">
-            <span>You</span>
-            <i class="ri-user-line"></i>
-          </div>
-          <div class="message-content">{message.content}</div>
-        </div>
-      ) : message.type === MessageType.THINKING ? (
-        <div class="message-bubble ai">
-          <div class="model-info">
-            <i class={getModelIcon()}></i>
-            <span>{message.model}</span>
-          </div>
-          <div class="message-content typing">
-            <div class="typing-indicator">
-              <span></span>
-              <span></span>
-              <span></span>
+    <div class={`${styles.message} ${message.type === 'user' ? styles.user : styles.agent}`}>
+      <div class={styles.content}>
+        {message.type === 'user' ? (
+          <>
+            <div class={styles.userInfo}>
+              <span>You</span>
+              <i class="ri-user-line"></i>
             </div>
+            <div class={styles.messageText}>{message.content}</div>
+          </>
+        ) : message.type === 'thinking' ? (
+          <div class={styles.thinking}>
+            <div class={styles.dot}></div>
+            <div class={styles.dot}></div>
+            <div class={styles.dot}></div>
           </div>
-        </div>
-      ) : (
-        <div class="message-bubble ai">
-          <div class="model-info">
-            <i class={getModelIcon()}></i>
-            <span>{message.model}</span>
-            <i 
-              class={`copy-icon ri-${isCopied() ? 'check-line' : 'file-copy-line'}`}
-              onClick={copyText}
+        ) : (
+          <>
+            <div class={styles.agentInfo}>
+              <i class={message.agent?.icon || "ri-robot-line"}></i>
+              <span>{message.agent?.name || "AI"}</span>
+            </div>
+            <div 
+              class={styles.messageText}
+              ref={messageContentRef}
+              innerHTML={getFormattedContent()}
             />
-          </div>
-          <div 
-            ref={messageContentRef}
-            class="message-content"
-            innerHTML={getFormattedContent()}
-          />
-        </div>
-      )}
+          </>
+        )}
+      </div>
     </div>
-  )
+  );
 }

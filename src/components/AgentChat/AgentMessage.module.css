@@ -1,0 +1,108 @@
+.message {
+  display: flex;
+  margin: 8px 0;
+  padding: 0 16px;
+}
+
+.user {
+  justify-content: flex-end;
+}
+
+.agent {
+  justify-content: flex-start;
+}
+
+.content {
+  max-width: 80%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: var(--message-bg);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.user .content {
+  background: var(--primary-color);
+  color: white;
+  border-radius: 12px 12px 0 12px;
+}
+
+.agent .content {
+  background: var(--message-bg);
+  border-radius: 12px 12px 12px 0;
+}
+
+.userInfo, .agentInfo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.userInfo {
+  justify-content: flex-end;
+}
+
+.messageText {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.messageText pre {
+  position: relative;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 12px;
+  border-radius: 0;
+  overflow-x: auto;
+  margin: 8px 0;
+}
+
+.thinking {
+  display: flex;
+  gap: 4px;
+  padding: 8px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-color);
+  opacity: 0.5;
+  animation: bounce 1s infinite;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--error-color);
+}
+
+.error i {
+  font-size: 1.2em;
+}
+
+.model {
+  margin-top: 4px;
+  font-size: 0.8em;
+  opacity: 0.7;
+}

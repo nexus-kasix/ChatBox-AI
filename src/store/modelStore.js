@@ -25,6 +25,13 @@ export const models = {
     model: 'gemini-1.5-flash-latest',
     description: 'Fastest model with great performance.'
   },
+  'learnlm-1-5-pro-exp': {
+    name: 'LearnLM 1.5 Pro Exp',
+    icon: 'ri-google-fill',
+    model: 'learnlm-1.5-pro-experimental',
+    description: 'Experimental model optimized for educational tasks.',
+    isNew: true
+  },
   'mistral-large': {
     name: 'Mistral Large',
     icon: 'ri-brain-fill',

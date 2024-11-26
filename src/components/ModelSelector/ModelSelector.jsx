@@ -41,7 +41,7 @@ export default function ModelSelector() {
             <div class="model-info">
               <i class={model.icon}></i>
               <span>{model.name}</span>
-              {(key === 'gemini-1-5-flash' || key === 'codestral') && (
+              {model.isNew && (
                 <span class="new-badge">NEW</span>
               )}
             </div>

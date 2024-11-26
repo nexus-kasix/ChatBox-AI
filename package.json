@@ -13,6 +13,7 @@
     "@mistralai/mistralai": "^1.3.4",
     "@solidjs/router": "^0.15.1",
     "dompurify": "^3.2.1",
+    "highlight.js": "^11.10.0",
     "marked": "^15.0.2",
     "prismjs": "^1.29.0",
     "remixicon": "^3.5.0",

@@ -4,7 +4,8 @@ import { selectedModel, models } from './modelStore'
 export const MessageType = {
   USER: 'user',
   AI: 'ai',
-  ERROR: 'error'
+  ERROR: 'error',
+  THINKING: 'thinking'
 }
 
 const createStore = () => {
@@ -18,8 +19,15 @@ const createStore = () => {
     }]
   }
 
-  const [chats, setChats] = createSignal(loadChats())
-  const [currentChatId, setCurrentChatId] = createSignal(chats()[0].id)
+  const savedChats = loadChats()
+  const savedCurrentId = localStorage.getItem('chatbox_current_chat')
+  
+  const [chats, setChats] = createSignal(savedChats)
+  const [currentChatId, setCurrentChatId] = createSignal(
+    savedCurrentId && savedChats.find(chat => chat.id === savedCurrentId) 
+      ? savedCurrentId 
+      : savedChats[0].id
+  )
 
   // Save chats to localStorage
   const saveChats = (newChats) => {
@@ -77,11 +85,63 @@ const createStore = () => {
   }
 
   const addAIResponse = (content) => {
+    // First clear any thinking messages
+    const updatedChats = chats().map(chat => {
+      if (chat.id === currentChatId()) {
+        return {
+          ...chat,
+          messages: chat.messages.filter(msg => msg.type !== MessageType.THINKING)
+        }
+      }
+      return chat
+    })
+    setChats(updatedChats)
+    
+    // Then add the AI response
     addMessage(content, MessageType.AI)
   }
 
   const addError = (error) => {
     addMessage(error, MessageType.ERROR)
+  }
+
+  const showThinking = () => {
+    const thinkingMessage = {
+      id: Date.now(),
+      content: '',
+      type: MessageType.THINKING,
+      model: selectedModel()
+    }
+    const updatedChats = chats().map(chat => {
+      if (chat.id === currentChatId()) {
+        return {
+          ...chat,
+          messages: [...chat.messages, thinkingMessage]
+        }
+      }
+      return chat
+    })
+    setChats(updatedChats)
+  }
+
+  const clearThinking = () => {
+    const updatedChats = chats().map(chat => {
+      if (chat.id === currentChatId()) {
+        return {
+          ...chat,
+          messages: chat.messages.filter(msg => msg.type !== MessageType.THINKING)
+        }
+      }
+      return chat
+    })
+    setChats(updatedChats)
+  }
+
+  const switchChat = (chatId) => {
+    if (chats().find(chat => chat.id === chatId)) {
+      setCurrentChatId(chatId)
+      localStorage.setItem('chatbox_current_chat', chatId)
+    }
   }
 
   const createNewChat = () => {
@@ -90,15 +150,12 @@ const createStore = () => {
       title: 'New Chat',
       messages: []
     }
-    const updatedChats = [newChat, ...chats()]
+    const updatedChats = [newChat, ...chats()]  // Новые чаты добавляем в начало списка
     setChats(updatedChats)
     setCurrentChatId(newChat.id)
     saveChats(updatedChats)
+    localStorage.setItem('chatbox_current_chat', newChat.id)
     return newChat
-  }
-
-  const switchChat = (chatId) => {
-    setCurrentChatId(chatId)
   }
 
   const deleteChat = (chatId) => {
@@ -110,6 +167,7 @@ const createStore = () => {
       // Если есть другие чаты, переключаемся на первый
       if (updatedChats.length > 0) {
         setCurrentChatId(updatedChats[0].id)
+        localStorage.setItem('chatbox_current_chat', updatedChats[0].id)
       } else {
         // Если чатов не осталось, создаем новый
         const newChat = createNewChat()
@@ -128,8 +186,9 @@ const createStore = () => {
       messages: []
     }
     setChats([defaultChat])
-    setCurrentChatId(defaultChat.id)
+    switchChat(defaultChat.id)
     localStorage.removeItem('chatbox_chats')
+    localStorage.removeItem('chatbox_current_chat')
   }
 
   return {
@@ -141,6 +200,8 @@ const createStore = () => {
     addMessage,
     addAIResponse,
     addError,
+    showThinking,
+    clearThinking,
     createNewChat,
     switchChat,
     deleteChat,

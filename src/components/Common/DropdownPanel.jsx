@@ -13,3 +13,22 @@ export default function DropdownPanel(props) {
     </div>
   );
 }
+
+// Example of dropdown item component for consistent styling
+export function DropdownItem(props) {
+  return (
+    <div 
+      class={`dropdown-item ${props.selected ? 'selected' : ''}`} 
+      onClick={props.onClick}
+    >
+      {props.icon && <i class={props.icon}></i>}
+      <div class="dropdown-item-content">
+        <div class="dropdown-item-title">{props.title}</div>
+        {props.description && (
+          <div class="dropdown-item-description">{props.description}</div>
+        )}
+      </div>
+      {props.children}
+    </div>
+  );
+}

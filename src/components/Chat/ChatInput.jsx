@@ -3,7 +3,6 @@ import { selectedModel, models } from "../../store/modelStore";
 import { useStore } from "../../store/chatStore";
 import { getAIClient, apiKeys } from "../../store/settingsStore";
 import ModelSelector from "../ModelSelector/ModelSelector";
-import AddButton from "../AddButton/AddButton";
 
 const generationConfig = {
   temperature: 1,
@@ -14,7 +13,7 @@ const generationConfig = {
 
 export default function ChatInput() {
   const [inputValue, setInputValue] = createSignal("");
-  const { addMessage, addAIResponse, addError } = useStore();
+  const { addMessage, addAIResponse, addError, showThinking } = useStore();
   const [chatSession, setChatSession] = createSignal(null);
 
   const handleSubmit = async (e) => {
@@ -23,9 +22,10 @@ export default function ChatInput() {
     if (message) {
       addMessage(message);
       setInputValue("");
+      showThinking();
 
       const model = selectedModel();
-      const provider = model.startsWith('gemini') ? 'google' : 'mistral';
+      const provider = model.startsWith('gemini') || model.startsWith('learnlm') ? 'google' : 'mistral';
       
       if (provider === 'google') {
         const client = getAIClient(provider);
@@ -131,7 +131,6 @@ export default function ChatInput() {
           onInput={(e) => setInputValue(e.target.value)}
           placeholder="Message..."
         />
-        <AddButton />
         <ModelSelector />
         <button type="submit" class="send-button">
           <span>Send</span>
