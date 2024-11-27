@@ -104,7 +104,7 @@ export default function Message({ message }) {
         </div>
       ) : message.type === MessageType.THINKING ? (
         <div class="message-bubble ai">
-          <div class="model-info">
+          <div class="message-model-info">
             <i class={getModelIcon()}></i>
             <span>{message.model}</span>
           </div>
@@ -118,7 +118,7 @@ export default function Message({ message }) {
         </div>
       ) : (
         <div class="message-bubble ai">
-          <div class="model-info">
+          <div class="message-model-info">
             <i class={getModelIcon()}></i>
             <span>{message.model}</span>
             <i 

@@ -38,7 +38,7 @@ export default function ModelSelector() {
             onMouseEnter={() => setHoveredModel(key)}
             onMouseLeave={() => setHoveredModel(null)}
           >
-            <div class="model-info">
+            <div class="selector-model-info">
               <i class={model.icon}></i>
               <span>{model.name}</span>
               {model.isNew && (

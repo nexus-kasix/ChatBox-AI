@@ -178,23 +178,19 @@ body, #root {
   word-break: break-word;
 }
 
-.message-info {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;  /* Выравнивание справа */
-  gap: 6px;
-  margin-bottom: 4px;  /* Отступ снизу вместо сверху */
-  font-size: 0.85rem;
-  opacity: 0.9;
-}
-
-.model-info {
+.message-model-info {
   display: flex;
   align-items: center;
   gap: 6px;
   margin-bottom: 4px;
   font-size: 0.85rem;
   opacity: 0.9;
+}
+
+.selector-model-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .typing-indicator {
@@ -461,12 +457,6 @@ pre::before {
 
 .model-option:not(.selected):hover {
   background-color: var(--hover-color);
-}
-
-.model-info {
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 
 .model-description {
