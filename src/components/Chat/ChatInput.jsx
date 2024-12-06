@@ -133,7 +133,6 @@ export default function ChatInput() {
         />
         <ModelSelector />
         <button type="submit" class="send-button">
-          <span>Send</span>
           <i class="ri-send-plane-fill"></i>
         </button>
       </form>

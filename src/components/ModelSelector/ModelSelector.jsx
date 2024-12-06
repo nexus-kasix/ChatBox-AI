@@ -16,8 +16,7 @@ export default function ModelSelector() {
 
   const getModelClasses = (modelKey) => {
     const isSelected = selectedModel() === modelKey
-    const isHovered = hoveredModel() === modelKey
-    return `model-option ${isSelected ? 'selected' : ''} ${isHovered ? 'hovered' : ''}`
+    return `model-option ${isSelected ? 'selected' : ''}`
   }
 
   return (
@@ -26,6 +25,7 @@ export default function ModelSelector() {
         type="button" 
         class="model-button" 
         onClick={toggleModelMenu}
+        title="Select AI Model"
       >
         <i class={models[selectedModel()].icon}></i>
       </button>
@@ -38,16 +38,16 @@ export default function ModelSelector() {
             onMouseEnter={() => setHoveredModel(key)}
             onMouseLeave={() => setHoveredModel(null)}
           >
-            <div class="selector-model-info">
-              <i class={model.icon}></i>
-              <span>{model.name}</span>
-              {model.isNew && (
-                <span class="new-badge">NEW</span>
+            <i class={model.icon}></i>
+            <div class="model-name-wrapper">
+              <div class="model-name">
+                {model.name}
+                {model.isNew && <span class="new-badge">NEW</span>}
+              </div>
+              {hoveredModel() === key && (
+                <div class="model-description">{model.description}</div>
               )}
             </div>
-            {hoveredModel() === key && (
-              <div class="model-description">{model.description}</div>
-            )}
           </button>
         ))}
       </div>
