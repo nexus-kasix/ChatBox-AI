@@ -13,6 +13,10 @@ export const providers = {
   mistral: {
     name: 'Mistral AI',
     icon: 'ri-brain-fill'
+  },
+  together: {
+    name: 'Together AI',
+    icon: 'ri-code-box-fill'
   }
 };
 
@@ -20,7 +24,8 @@ export const [isSettingsOpen, setIsSettingsOpen] = createSignal(false);
 export const [currentProvider, setCurrentProvider] = createSignal('google');
 export const [apiKeys, setApiKeys] = createSignal({
   google: localStorage.getItem('google_api_key') || '',
-  mistral: localStorage.getItem('mistral_api_key') || ''
+  mistral: localStorage.getItem('mistral_api_key') || '',
+  together: localStorage.getItem('together_api_key') || ''
 });
 
 export const saveApiKey = (provider, key) => {

@@ -27,7 +27,7 @@ export default function ModelSelector() {
         onClick={toggleModelMenu}
         title="Select AI Model"
       >
-        <i class={models[selectedModel()].icon}></i>
+        <i class={models[selectedModel()]?.icon || 'ri-robot-fill'}></i>
       </button>
       <div class={`model-menu ${isModelMenuOpen() ? 'open' : ''}`}>
         {Object.entries(models).map(([key, model]) => (

@@ -25,7 +25,8 @@ export default function ChatInput() {
       showThinking();
 
       const model = selectedModel();
-      const provider = model.startsWith('gemini') || model.startsWith('learnlm') ? 'google' : 'mistral';
+      const modelConfig = models[model];
+      const provider = modelConfig.provider;
       
       if (provider === 'google') {
         const client = getAIClient(provider);
@@ -36,7 +37,7 @@ export default function ChatInput() {
 
         try {
           const model = client.getGenerativeModel({ 
-            model: models[selectedModel()].model,
+            model: modelConfig.model,
             generationConfig,
           });
 
@@ -49,7 +50,7 @@ export default function ChatInput() {
 
           const result = await chatSession().sendMessage(message);
           console.log('Response from model:', {
-            model: result.response.promptFeedback?.modelId || models[selectedModel()].model,
+            model: result.response.promptFeedback?.modelId || modelConfig.model,
             safetyRatings: result.response.promptFeedback?.safetyRatings,
             candidates: result.response.candidates,
           });
@@ -58,8 +59,68 @@ export default function ChatInput() {
           console.error('API Error:', error);
           addError(error.message);
         }
-      } else {
-        // Mistral
+      } else if (provider === 'together') {
+        const keys = apiKeys();
+        if (!keys.together) {
+          addError('Please set up your Together AI API key in settings first');
+          return;
+        }
+
+        try {
+          const requestBody = {
+            model: modelConfig.model,
+            messages: [{
+              role: "user",
+              content: message
+            }],
+            max_tokens: 800,
+            temperature: 0.7,
+            top_p: 0.7,
+            top_k: 50,
+            repetition_penalty: 1,
+            stop: modelConfig.stop || ["<|eot_id|>", "<|eom_id|>"]
+          };
+
+          console.log('Sending request to Together AI:', {
+            model: modelConfig.model,
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${keys.together.substring(0, 5)}...`
+            },
+            body: requestBody
+          });
+
+          const response = await fetch('https://api.together.xyz/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${keys.together}`
+            },
+            body: JSON.stringify(requestBody)
+          });
+
+          if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Together AI Error:', {
+              status: response.status,
+              statusText: response.statusText,
+              error: errorText
+            });
+            throw new Error(`API request failed: ${response.status} - ${errorText}`);
+          }
+
+          const result = await response.json();
+          console.log('Response from model:', {
+            model: modelConfig.model,
+            response: result
+          });
+          
+          addAIResponse(result.choices[0].message.content);
+        } catch (error) {
+          console.error('API Error:', error);
+          addError(error.message);
+        }
+      } else if (provider === 'mistral') {
         const keys = apiKeys();
         if (!keys.mistral) {
           addError('Please set up your Mistral API key in settings first');
@@ -68,7 +129,7 @@ export default function ChatInput() {
 
         try {
           const requestBody = {
-            model: models[selectedModel()].model,
+            model: modelConfig.model,
             messages: [
               {
                 role: "user",
@@ -81,7 +142,7 @@ export default function ChatInput() {
 
           console.log('Sending request to Mistral:', {
             url: 'https://api.mistral.ai/v1/chat/completions',
-            model: models[selectedModel()].model,
+            model: modelConfig.model,
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${keys.mistral.substring(0, 5)}...`
@@ -110,7 +171,7 @@ export default function ChatInput() {
 
           const result = await response.json();
           console.log('Response from model:', {
-            model: models[selectedModel()].model,
+            model: modelConfig.model,
             response: result
           });
           addAIResponse(result.choices[0].message.content);
